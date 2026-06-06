@@ -1,12 +1,8 @@
-# Laboratorium 14 - PLIK BAZOWY (base)
+# Laboratorium 14 - PLIK BAZOWY
 # Autor: Bartosz Owczarczyk
 #
-# Plik bazowy zawiera WYLACZNIE skladniki wspolne dla wszystkich srodowisk
-# (development, CI, staging, produkcja). Ustawienia specyficzne dla srodowiska
-# (np. publikowane porty) zostaly przeniesione do pliku docker-compose.override.yml.
-#
-# Compose przy poleceniu "docker compose up" automatycznie scala ten plik
-# z docker-compose.override.yml (mechanizm merge, bez potrzeby opcji -f).
+# Lab 14 - plik bazowy (wspolne dla wszystkich srodowisk)
+# porty wyniesione do docker-compose.override.yml
 
 services:
   nginx:

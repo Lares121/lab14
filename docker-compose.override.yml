@@ -1,14 +1,7 @@
 # Laboratorium 14 - PLIK OVERRIDE (nadpisywania)
 # Autor: Bartosz Owczarczyk
 #
-# Plik zawiera ustawienia SPECYFICZNE dla danego srodowiska. Tutaj sa to
-# publikowane porty - typowy przyklad parametru, ktory rozni sie miedzy
-# srodowiskami (np. w CI mozna ich w ogole nie publikowac, a w produkcji
-# uzyc innych wartosci).
-#
-# Compose laczy ten plik z plikiem bazowym docker-compose.yml automatycznie
-# (standardowa nazwa docker-compose.override.yml -> brak potrzeby opcji -f).
-# Reguly scalania: listy (np. ports) sa LACZONE, a wartosci skalarne nadpisywane.
+# Lab 14 - override: porty (specyficzne dla srodowiska)
 
 services:
   nginx:
