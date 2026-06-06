@@ -1,0 +1,73 @@
+# Laboratorium 14 - PLIK BAZOWY (base)
+# Autor: Bartosz Owczarczyk
+#
+# Plik bazowy zawiera WYLACZNIE skladniki wspolne dla wszystkich srodowisk
+# (development, CI, staging, produkcja). Ustawienia specyficzne dla srodowiska
+# (np. publikowane porty) zostaly przeniesione do pliku docker-compose.override.yml.
+#
+# Compose przy poleceniu "docker compose up" automatycznie scala ten plik
+# z docker-compose.override.yml (mechanizm merge, bez potrzeby opcji -f).
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: lab14_nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./src:/var/www/html:ro
+    depends_on:
+      - php
+    networks:
+      - frontend
+      - backend
+
+  php:
+    image: php:8.3-fpm-alpine
+    container_name: lab14_php
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:8.4
+    container_name: lab14_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: lab14_phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    depends_on:
+      - mysql
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+
+secrets:
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  db_password:
+    file: ./secrets/db_password.txt
